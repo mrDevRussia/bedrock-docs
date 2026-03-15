@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
     
     <link rel="apple-touch-icon" href="favicon.png">
 <meta charset="UTF-8">
@@ -270,6 +270,86 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
 /* highlight row */
 .hl-row td{background:#fefce8!important}
 .hl-row td:first-child{background:#fef9c3!important}
+
+/* ══════════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════════ */
+.site-footer{
+  margin-left:var(--sidebar-w);
+  border-top:1px solid var(--g150);
+  padding:20px 72px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+  background:var(--g50);
+}
+.footer-copy{font-size:11.5px;color:var(--g400)}
+.footer-copy strong{color:var(--g600);font-weight:600}
+.footer-links{display:flex;gap:14px}
+.footer-links a{font-size:11.5px;color:var(--g400);text-decoration:none;transition:color .1s}
+.footer-links a:hover{color:var(--accent)}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE HAMBURGER
+══════════════════════════════════════════════════════════════ */
+.mob-menu-btn{
+  display:none;background:transparent;border:none;cursor:pointer;
+  padding:6px;color:#888;margin-right:4px;
+}
+.mob-menu-btn svg{width:20px;height:20px}
+.mob-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:199;backdrop-filter:blur(2px);
+}
+.mob-overlay.open{display:block}
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION HIGHLIGHT PULSE
+══════════════════════════════════════════════════════════════ */
+@keyframes sectionPulse{
+  0%{background:var(--info-bg)}
+  100%{background:transparent}
+}
+.section-highlight{animation:sectionPulse 1.2s ease-out}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE / MOBILE
+══════════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  :root{--sidebar-w:0px;--header-h:44px}
+  .mob-menu-btn{display:flex;align-items:center;justify-content:center}
+  .hd-nav,.hd-search,.hd-sep{display:none!important}
+  aside{
+    width:280px;left:-280px;transition:left .25s ease;
+    box-shadow:none;z-index:200;
+  }
+  aside.open{left:0;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+  main{margin-left:0}
+  .content-inner{padding:28px 20px 80px}
+  .page-title{font-size:22px}
+  .page-title em{font-size:24px}
+  .toc-grid{grid-template-columns:1fr}
+  .page-nav{flex-direction:column}
+  .page-nav a{max-width:100%}
+  .pn-right{margin-left:0;text-align:left;flex-direction:row}
+  .pn-right .nav-info{align-items:flex-start}
+  .site-footer{margin-left:0;padding:16px 20px}
+  .hero-banner{flex-direction:column;gap:12px}
+  .hero-banner p{max-width:100%}
+  .code-block{font-size:11.5px}
+  .doc-table{font-size:11.5px}
+  .ascii-block{font-size:11px}
+  h2.section-title{font-size:15px}
+  .hd-version{display:none}
+}
+@media(max-width:480px){
+  .content-inner{padding:20px 14px 60px}
+  .page-title{font-size:20px}
+  .hero-banner{padding:18px 16px}
+}
+@media(min-width:769px){
+  .mob-overlay{display:none!important}
+  aside{left:0!important;box-shadow:none!important}
+}
 </style>
 </head>
 <body>
@@ -277,20 +357,25 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
 <!-- ══ HEADER ══════════════════════════════════════════════════ -->
 <header>
   <div class="hd-left">
+    <button class="mob-menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
     <a class="logo-wrap" href="#" onclick="nav('home',null);return false;">
       <img class="logo-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABLAEcDASIAAhEBAxEB/8QAHQAAAgICAwEAAAAAAAAAAAAAAAYDCQcIAQIEBf/EAD0QAAAFAgIECAsJAQAAAAAAAAABAgMEBREGBwgSFyETMTZUdJOy0hQiI1FhkZKhsdHhFTI3QVJTVXFyc//EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX7G2KJ9EqjUWKzFWhbBOGbqVGdzUovyMvMPg7QKzzaB1a+8Oc1uUMfoie2sKsSO7KkIjsJ1nFnZJecA07QKzzaB1a+8DaBWebQOrX3hI1lpjBxpDiKUs0rK5Hv+Q77MMZfxK/f8gEG0Cs82gdWvvA2gVnm0Dq194T7MMZ/wAQv3/IGy/Gf8Qv3/IBBtArPNoHVr7wNoFZ5tA6tfeBUMu8VwYi5UmmKQ0jjVv3e4KjiTSZpMrGR2MA17QKzzaB1a+8AKIADdmtyij9ET21jxZeSY8TGNNkSVIS0h26zVxEQ9ua3KKP0RPbWFEBaFgTHGXsulUuns1OkOy1MF5MiSar+oZCKFTjbJwokTVNOtfgk8XqFX2j+alZo0y5+f4kLPWd1CR0MuwAWKtjrLukzlwZ9RpDMhv7yFkkjL3CKHmHlrLlNxY9Voy3nDslJatz9wr70lXF7XqtqrMtxfEwv5TrWrH9J1lGflAFkmbFCarOX8pimQ47jrpEps0NFcysYr0xflLjGjsyqjNpj7Ufhlnc27brmLMsKcm6d0dPwGOtKI7ZYyN/6vgArKMrHYwDu994/wDRgANWa3KKP0RPbWFEN2a3KKP0RPbWFEBkTR7/ABTpn9H8SFoEFsnaSw2fEuMlPrSQrA0dyvmpTP6P4kLP4izbpTKyLemMky9kgGCsc6MuHcU4mk1qWpfCP2vZ0yHnw1osYVotajVJrhNdhVy8sYSc4tJ3EOD8eTaFGo0d5pgistTqiM+MfBw1paYlqdbjQ10OMhLqrGZPKAbb4vqB4UwUuVGK/giCSkuPiIxpFmlpHVPFFElUKQyZETq031CLdew3dlQU4ywKwxJUbBTWCWo077GZfUarZvaMlCwxhmZW2a3Jed1luaqmkkXnAafqPWMz853AOXE6qjLzGZAANma3KKP0RPbWFWOy7IeSyyhS3FHZKS4zDVmtyij9ET21j5mCJUeHimBJkq1Wm3LqMBk/IDA2LYmZNKnSKBObjGkz4VTfi2uQsaYQoqUhBpPW8GIrenVGIcIZ1ZZRMO05l6qkl5pgkq8TiP1j7e3vLPi+3D9j6gNOtJPL7GFUzbqcyBQJz8dZJ1XENXI+MJ+C8ucbxcUQXHsN1FKCXvUbW4hvkrPTK1Rma6wRn/j6iM888qCO/wBrFf8A5/UA8YYebpmC6cucomCajJJevu1Tt+YxRpA48whUsvJcaHX4Lz/jp4NLlzvYRZlZ35dVDBk2HDrRqdWVklqeg/SK9qpKU7PlKbcM21vrUXpI1GA8rxka1W/UYB0AAbs1uUUfoie2sKRGZHctwbs1eULHRE9tYUbAJCkPEVuGd9oweEP/ALzvtmI7AsAk8If/AHnfbMHhD37zvtGI7AsA7qedMrG64f8AajEY5sOTIgHUA7ERAAf/2Q==" alt="B">
       <span class="logo-text">BedRock<sup>docs</sup></span>
     </a>
     <div class="hd-sep"></div>
-    <span class="hd-version">Release 1.1</span>
+    <span class="hd-version">Rev 1.0</span>
   </div>
   <div class="hd-right">
     <nav class="hd-nav" style="display:flex;gap:2px">
-      <a href="https://github.com/mrDevRussia" style="display:flex;align-items:center;gap:5px;border-left:1px solid #1e1e28;margin-left:6px;padding-left:14px">
+
+      <a href="https://github.com/mrDevRussia/BedRock-Language-Open-Source" style="display:flex;align-items:center;gap:5px;border-left:1px solid #1e1e28;margin-left:6px;padding-left:14px">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
       </a>
     </nav>
+   
   </div>
 </header>
 
@@ -330,9 +415,9 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">1. Core Philosophy</span>
       </div>
       <ul class="tree-children" id="ch-1" style="max-height:500px">
-        <li><a class="tree-row" href="#" data-page="philosophy" onclick="nav('philosophy',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">1.1 No Magic</span></a></li>
-        <li><a class="tree-row" href="#" data-page="philosophy" onclick="nav('philosophy',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">1.2 Byte-Level Validation</span></a></li>
-        <li><a class="tree-row" href="#" data-page="philosophy" onclick="nav('philosophy',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">1.3 Direct Hardware Control</span></a></li>
+        <li><a class="tree-row" href="#" data-page="philosophy" data-anchor="s1-1" onclick="navA('philosophy','s1-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">1.1 No Magic</span></a></li>
+        <li><a class="tree-row" href="#" data-page="philosophy" data-anchor="s1-2" onclick="navA('philosophy','s1-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">1.2 Byte-Level Validation</span></a></li>
+        <li><a class="tree-row" href="#" data-page="philosophy" data-anchor="s1-3" onclick="navA('philosophy','s1-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">1.3 Direct Hardware Control</span></a></li>
       </ul>
     </li>
 
@@ -345,10 +430,10 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">2. Lexical Grammar</span>
       </div>
       <ul class="tree-children collapsed" id="ch-2" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="lexical" onclick="nav('lexical',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.1 Keywords</span></a></li>
-        <li><a class="tree-row" href="#" data-page="lexical" onclick="nav('lexical',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.2 Operators</span></a></li>
-        <li><a class="tree-row" href="#" data-page="lexical" onclick="nav('lexical',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.3 Literals</span></a></li>
-        <li><a class="tree-row" href="#" data-page="lexical" onclick="nav('lexical',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.4 Comments & Include</span></a></li>
+        <li><a class="tree-row" href="#" data-page="lexical" data-anchor="s2-1" onclick="navA('lexical','s2-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.1 Keywords</span></a></li>
+        <li><a class="tree-row" href="#" data-page="lexical" data-anchor="s2-2" onclick="navA('lexical','s2-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.2 Operators</span></a></li>
+        <li><a class="tree-row" href="#" data-page="lexical" data-anchor="s2-3" onclick="navA('lexical','s2-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.3 Literals</span></a></li>
+        <li><a class="tree-row" href="#" data-page="lexical" data-anchor="s2-4" onclick="navA('lexical','s2-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">2.4 Comments &amp; Include</span></a></li>
       </ul>
     </li>
 
@@ -361,12 +446,12 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">3. Memory Model</span>
       </div>
       <ul class="tree-children collapsed" id="ch-3" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="memory" onclick="nav('memory',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.1 Address Space</span></a></li>
-        <li><a class="tree-row" href="#" data-page="memory" onclick="nav('memory',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.2 Segment Layout</span></a></li>
-        <li><a class="tree-row" href="#" data-page="memory" onclick="nav('memory',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.3 let — Static Variable</span></a></li>
-        <li><a class="tree-row" href="#" data-page="memory" onclick="nav('memory',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.4 root — HW Constant</span></a></li>
-        <li><a class="tree-row" href="#" data-page="memory" onclick="nav('memory',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.5 Stack Frame</span></a></li>
-        <li><a class="tree-row" href="#" data-page="memory" onclick="nav('memory',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.6 Register Allocation</span></a></li>
+        <li><a class="tree-row" href="#" data-page="memory" data-anchor="s3-1" onclick="navA('memory','s3-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.1 Address Space</span></a></li>
+        <li><a class="tree-row" href="#" data-page="memory" data-anchor="s3-2" onclick="navA('memory','s3-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.2 Segment Layout</span></a></li>
+        <li><a class="tree-row" href="#" data-page="memory" data-anchor="s3-3" onclick="navA('memory','s3-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.3 let — Static Variable</span></a></li>
+        <li><a class="tree-row" href="#" data-page="memory" data-anchor="s3-4" onclick="navA('memory','s3-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.4 root — HW Constant</span></a></li>
+        <li><a class="tree-row" href="#" data-page="memory" data-anchor="s3-5" onclick="navA('memory','s3-5',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.5 Stack Frame</span></a></li>
+        <li><a class="tree-row" href="#" data-page="memory" data-anchor="s3-6" onclick="navA('memory','s3-6',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">3.6 Register Allocation</span></a></li>
       </ul>
     </li>
 
@@ -379,12 +464,12 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">4. Detailed Syntax Guide</span>
       </div>
       <ul class="tree-children collapsed" id="ch-4" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="syntax" onclick="nav('syntax',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.1 Variable Declarations</span></a></li>
-        <li><a class="tree-row" href="#" data-page="syntax" onclick="nav('syntax',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.2 Arrays & Strings</span></a></li>
-        <li><a class="tree-row" href="#" data-page="syntax" onclick="nav('syntax',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.3 Arithmetic & Expressions</span></a></li>
-        <li><a class="tree-row" href="#" data-page="syntax" onclick="nav('syntax',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.4 Functions</span></a></li>
-        <li><a class="tree-row" href="#" data-page="syntax" onclick="nav('syntax',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.5 Control Flow</span></a></li>
-        <li><a class="tree-row" href="#" data-page="syntax" onclick="nav('syntax',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.6 Inline Assembly</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-1" onclick="navA('syntax','s4-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.1 Variable Declarations</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-2" onclick="navA('syntax','s4-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.2 Arrays &amp; Strings</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-3" onclick="navA('syntax','s4-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.3 Arithmetic &amp; Expressions</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-4" onclick="navA('syntax','s4-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.4 Functions</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-5" onclick="navA('syntax','s4-5',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.5 Control Flow</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-6" onclick="navA('syntax','s4-6',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.6 Inline Assembly</span></a></li>
       </ul>
     </li>
 
@@ -397,12 +482,12 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">5. Instruction Generation</span>
       </div>
       <ul class="tree-children collapsed" id="ch-5" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="codegen" onclick="nav('codegen',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.1 Compiler Pipeline</span></a></li>
-        <li><a class="tree-row" href="#" data-page="codegen" onclick="nav('codegen',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.2 Load Immediate</span></a></li>
-        <li><a class="tree-row" href="#" data-page="codegen" onclick="nav('codegen',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.3 Binary Operations</span></a></li>
-        <li><a class="tree-row" href="#" data-page="codegen" onclick="nav('codegen',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.4 Control Flow Codegen</span></a></li>
-        <li><a class="tree-row" href="#" data-page="codegen" onclick="nav('codegen',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.5 Memory Operations</span></a></li>
-        <li><a class="tree-row" href="#" data-page="codegen" onclick="nav('codegen',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.6 Binary Output Format</span></a></li>
+        <li><a class="tree-row" href="#" data-page="codegen" data-anchor="s5-1" onclick="navA('codegen','s5-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.1 Compiler Pipeline</span></a></li>
+        <li><a class="tree-row" href="#" data-page="codegen" data-anchor="s5-2" onclick="navA('codegen','s5-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.2 Load Immediate</span></a></li>
+        <li><a class="tree-row" href="#" data-page="codegen" data-anchor="s5-3" onclick="navA('codegen','s5-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.3 Binary Operations</span></a></li>
+        <li><a class="tree-row" href="#" data-page="codegen" data-anchor="s5-4" onclick="navA('codegen','s5-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.4 Control Flow Codegen</span></a></li>
+        <li><a class="tree-row" href="#" data-page="codegen" data-anchor="s5-5" onclick="navA('codegen','s5-5',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.5 Memory Operations</span></a></li>
+        <li><a class="tree-row" href="#" data-page="codegen" data-anchor="s5-6" onclick="navA('codegen','s5-6',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">5.6 Binary Output Format</span></a></li>
       </ul>
     </li>
 
@@ -415,12 +500,12 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">6. Hardware Interfacing</span>
       </div>
       <ul class="tree-children collapsed" id="ch-6" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="hardware" onclick="nav('hardware',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.1 poke — Memory Write</span></a></li>
-        <li><a class="tree-row" href="#" data-page="hardware" onclick="nav('hardware',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.2 peek — Memory Read</span></a></li>
-        <li><a class="tree-row" href="#" data-page="hardware" onclick="nav('hardware',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.3 outb / inb — I/O</span></a></li>
-        <li><a class="tree-row" href="#" data-page="hardware" onclick="nav('hardware',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.4 VGA Text Mode</span></a></li>
-        <li><a class="tree-row" href="#" data-page="hardware" onclick="nav('hardware',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.5 Keyboard Input</span></a></li>
-        <li><a class="tree-row" href="#" data-page="hardware" onclick="nav('hardware',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.6 Raw asm Injection</span></a></li>
+        <li><a class="tree-row" href="#" data-page="hardware" data-anchor="s6-1" onclick="navA('hardware','s6-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.1 poke — Memory Write</span></a></li>
+        <li><a class="tree-row" href="#" data-page="hardware" data-anchor="s6-2" onclick="navA('hardware','s6-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.2 peek — Memory Read</span></a></li>
+        <li><a class="tree-row" href="#" data-page="hardware" data-anchor="s6-3" onclick="navA('hardware','s6-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.3 outb / inb — I/O</span></a></li>
+        <li><a class="tree-row" href="#" data-page="hardware" data-anchor="s6-4" onclick="navA('hardware','s6-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.4 VGA Text Mode</span></a></li>
+        <li><a class="tree-row" href="#" data-page="hardware" data-anchor="s6-5" onclick="navA('hardware','s6-5',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.5 Keyboard Input</span></a></li>
+        <li><a class="tree-row" href="#" data-page="hardware" data-anchor="s6-6" onclick="navA('hardware','s6-6',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">6.6 Raw asm Injection</span></a></li>
       </ul>
     </li>
 
@@ -433,11 +518,11 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">7. Best Practices</span>
       </div>
       <ul class="tree-children collapsed" id="ch-7" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="practices" onclick="nav('practices',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.1 Address Library Pattern</span></a></li>
-        <li><a class="tree-row" href="#" data-page="practices" onclick="nav('practices',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.2 Pure Functions</span></a></li>
-        <li><a class="tree-row" href="#" data-page="practices" onclick="nav('practices',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.3 Bulk HW Operations</span></a></li>
-        <li><a class="tree-row" href="#" data-page="practices" onclick="nav('practices',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.4 Memory Layout</span></a></li>
-        <li><a class="tree-row" href="#" data-page="practices" onclick="nav('practices',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.5 asm Documentation</span></a></li>
+        <li><a class="tree-row" href="#" data-page="practices" data-anchor="s7-1" onclick="navA('practices','s7-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.1 Address Library Pattern</span></a></li>
+        <li><a class="tree-row" href="#" data-page="practices" data-anchor="s7-2" onclick="navA('practices','s7-2',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.2 Pure Functions</span></a></li>
+        <li><a class="tree-row" href="#" data-page="practices" data-anchor="s7-3" onclick="navA('practices','s7-3',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.3 Bulk HW Operations</span></a></li>
+        <li><a class="tree-row" href="#" data-page="practices" data-anchor="s7-4" onclick="navA('practices','s7-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.4 Memory Layout</span></a></li>
+        <li><a class="tree-row" href="#" data-page="practices" data-anchor="s7-5" onclick="navA('practices','s7-5',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">7.5 asm Documentation</span></a></li>
       </ul>
     </li>
 
@@ -450,8 +535,8 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <span class="tree-label">8. Compiler Enforcement</span>
       </div>
       <ul class="tree-children collapsed" id="ch-8" style="max-height:0">
-        <li><a class="tree-row" href="#" data-page="edge" onclick="nav('edge',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">8.1–8.6 Critical Limits</span></a></li>
-        <li><a class="tree-row" href="#" data-page="edge" onclick="nav('edge',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">8.7–8.12 Compiler Bugs</span></a></li>
+        <li><a class="tree-row" href="#" data-page="edge" data-anchor="s8-1" onclick="navA('edge','s8-1',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">8.1–8.6 Critical Limits</span></a></li>
+        <li><a class="tree-row" href="#" data-page="edge" data-anchor="s8-7" onclick="navA('edge','s8-7',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">8.7–8.12 Compiler Bugs</span></a></li>
       </ul>
     </li>
 
@@ -511,7 +596,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
 
   <div class="doc-section">
     <span class="section-anchor" id="s1-1"></span>
-    <h2 class="section-title"><span class="snum">1.1</span> "No Magic"</h2>
+    <h2 class="section-title" id="s1-1"><span class="snum">1.1</span> "No Magic"</h2>
     <p>In BedRock, every operation maps to a <strong>known, fixed sequence of machine instructions</strong>. There are no hidden runtime allocations, no garbage collector, no implicit type coercions, and no virtual dispatch. What you write is exactly what executes.</p>
     <p>This is enforced by design — the table below shows the exact 1-to-1 mapping for common constructs:</p>
     <div class="tbl-wrap">
@@ -532,7 +617,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
 
   <div class="doc-section">
     <span class="section-anchor" id="s1-2"></span>
-    <h2 class="section-title"><span class="snum">1.2</span> "Byte-Level Validation"</h2>
+    <h2 class="section-title" id="s1-2"><span class="snum">1.2</span> "Byte-Level Validation"</h2>
     <p>Numbers in BedRock are unsigned 64-bit integers at parse time, collapsed to 32-bit at code generation. All memory addresses are 32-bit values. There are no floating-point types, no signed arithmetic in the type system, and no implicit widening or truncation.</p>
     <p>The compiler validates output at the byte level by:</p>
     <ul class="doc-list">
@@ -544,7 +629,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
 
   <div class="doc-section">
     <span class="section-anchor" id="s1-3"></span>
-    <h2 class="section-title"><span class="snum">1.3</span> "Direct Hardware Control"</h2>
+    <h2 class="section-title" id="s1-3"><span class="snum">1.3</span> "Direct Hardware Control"</h2>
     <p>BedRock provides five mechanisms for hardware access that map directly to bare-metal MIPS operations. There is no operating system abstraction layer.</p>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -584,7 +669,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">2.1</span> Keywords</h2>
+    <h2 class="section-title" id="s2-1"><span class="snum">2.1</span> Keywords</h2>
     <p>The following identifiers are reserved and cannot be used as variable or function names.</p>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -612,7 +697,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">2.2</span> Operators</h2>
+    <h2 class="section-title" id="s2-2"><span class="snum">2.2</span> Operators</h2>
     <h3 class="sub-title">Arithmetic Operators</h3>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -663,7 +748,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">2.3</span> Literals</h2>
+    <h2 class="section-title" id="s2-3"><span class="snum">2.3</span> Literals</h2>
     <h3 class="sub-title">Integer Literals</h3>
     <p>BedRock supports decimal and hexadecimal integer literals. All integers are stored as <code>u64</code> during lexing.</p>
     <div class="code-block">
@@ -694,7 +779,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">2.4</span> Comments &amp; Include Directive</h2>
+    <h2 class="section-title" id="s2-4"><span class="snum">2.4</span> Comments &amp; Include Directive</h2>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">comments.br</span><span class="cb-lang">BedRock</span></div>
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -732,7 +817,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">3.1</span> Address Space</h2>
+    <h2 class="section-title" id="s3-1"><span class="snum">3.1</span> Address Space</h2>
     <p>BedRock uses a flat 32-bit address space. The layout is determined by three <code>root</code> declarations:</p>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -757,7 +842,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">3.2</span> Segment Layout</h2>
+    <h2 class="section-title" id="s3-2"><span class="snum">3.2</span> Segment Layout</h2>
     <div class="ascii-block">┌─────────────────────────────────┐  ← BASE (e.g. 0x80000000)
 │  BOOTLOADER (3 instructions)    │  NOP, li $sp STACK, J main
 ├─────────────────────────────────┤
@@ -774,7 +859,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">3.3</span> <code>let</code> — Static Variable</h2>
+    <h2 class="section-title" id="s3-3"><span class="snum">3.3</span> <code>let</code> — Static Variable</h2>
     <p><code>let</code> declares a static variable. In global scope, the compiler allocates a fixed address in the DATA segment and emits <code>sw</code> (store word) instructions to initialize it. Variables do not occupy stack space in global scope.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -797,7 +882,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">3.4</span> <code>root</code> — Hardware / Environment Constant</h2>
+    <h2 class="section-title" id="s3-4"><span class="snum">3.4</span> <code>root</code> — Hardware / Environment Constant</h2>
     <p><code>root</code> declares a compile-time constant mapping a name to a fixed 32-bit address or value. Unlike <code>let</code>, a <code>root</code> symbol is <strong>never dereferenced</strong>. When used in an expression, it evaluates to the raw address value itself — not the value stored at that address.</p>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -823,7 +908,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">3.5</span> Stack Frame Structure</h2>
+    <h2 class="section-title" id="s3-5"><span class="snum">3.5</span> Stack Frame Structure</h2>
     <p>Every function call creates a 32-byte stack frame:</p>
     <div class="ascii-block">$sp + 28  ← Saved $ra (return address)
 $sp + 24  ← (reserved)
@@ -853,7 +938,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">3.6</span> Register Allocation</h2>
+    <h2 class="section-title" id="s3-6"><span class="snum">3.6</span> Register Allocation</h2>
     <p>BedRock uses a pool of 8 temporary registers (<code>$t0</code>–<code>$t7</code>, MIPS registers 8–15) for all expression evaluation. Registers are allocated from the front of the pool and freed back to the rear (FIFO with free-list).</p>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -893,7 +978,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">4.1</span> Variable Declarations</h2>
+    <h2 class="section-title" id="s4-1"><span class="snum">4.1</span> Variable Declarations</h2>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">variables.br</span><span class="cb-lang">BedRock</span></div>
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -909,7 +994,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">4.2</span> Arrays &amp; Strings</h2>
+    <h2 class="section-title" id="s4-2"><span class="snum">4.2</span> Arrays &amp; Strings</h2>
     <h3 class="sub-title">Array Definition &amp; Access</h3>
     <p>Arrays are statically allocated in the DATA segment. Only integer literals are permitted as element values. The compiler scales all indices by 4 (<code>sll idx, idx, 2</code>) — each element is a 32-bit word.</p>
     <div class="code-block">
@@ -934,7 +1019,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">4.3</span> Arithmetic &amp; Expressions</h2>
+    <h2 class="section-title" id="s4-3"><span class="snum">4.3</span> Arithmetic &amp; Expressions</h2>
     <p>Precedence rules: <code>*</code> and <code>/</code> bind tightly (handled in <code>parse_term</code>). All other operators — <code>+</code>, <code>-</code>, <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&amp;</code>, <code>|</code>, <code>^</code> — share the same lower precedence level (<code>parse_expression</code>). Use parentheses liberally — see §8.6.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -954,7 +1039,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">4.4</span> Function Definitions</h2>
+    <h2 class="section-title" id="s4-4"><span class="snum">4.4</span> Function Definitions</h2>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">functions.br</span><span class="cb-lang">BedRock</span></div>
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -987,7 +1072,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">4.5</span> Control Flow</h2>
+    <h2 class="section-title" id="s4-5"><span class="snum">4.5</span> Control Flow</h2>
     <h3 class="sub-title">if / else</h3>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1029,7 +1114,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">4.6</span> Inline Assembly</h2>
+    <h2 class="section-title" id="s4-6"><span class="snum">4.6</span> Inline Assembly</h2>
     <p>Emits a single 32-bit MIPS instruction directly into the code stream. The argument must be the exact 32-bit encoding as a hex string — <strong>without</strong> the <code>0x</code> prefix.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1041,10 +1126,6 @@ nop                    // Delay slot</div>
 <span class="tk-hw">asm</span>(<span class="tk-s">"00084080"</span>);   <span class="tk-c">// sll $t0, $t0, 2  (shift left by 2)</span>
 <span class="tk-hw">asm</span>(<span class="tk-s">"000840C0"</span>);   <span class="tk-c">// sll $t0, $t0, 3  (shift left by 3)</span></div>
       </div>
-    </div>
-    <div class="callout warn">
-      <span class="callout-ico">⚠</span>
-      <div>No shift operators (<code>&lt;&lt;</code>, <code>&gt;&gt;</code>) exist in BedRock's grammar. Use <code>asm</code> for all shift operations. See §8.10.</div>
     </div>
   </div>
 
@@ -1068,7 +1149,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">5.1</span> Compiler Pipeline</h2>
+    <h2 class="section-title" id="s5-1"><span class="snum">5.1</span> Compiler Pipeline</h2>
     <p>The compiler operates in a single pass with eight sequential phases:</p>
     <div class="tbl-wrap">
       <table class="doc-table">
@@ -1088,7 +1169,7 @@ nop                    // Delay slot</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">5.2</span> Load Immediate (<code>emit_li</code>)</h2>
+    <h2 class="section-title" id="s5-2"><span class="snum">5.2</span> Load Immediate (<code>emit_li</code>)</h2>
     <p>All constant loading uses the following pattern based on the value's bit width:</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1115,7 +1196,7 @@ ori $t0, $t0, 0x8000</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">5.3</span> Binary Operation Code Generation</h2>
+    <h2 class="section-title" id="s5-3"><span class="snum">5.3</span> Binary Operation Code Generation</h2>
     <p>All binary operations follow the pattern: allocate regs → gen left → gen right → emit instruction → free regs.</p>
     <h3 class="sub-title">Arithmetic Encodings</h3>
     <div class="tbl-wrap">
@@ -1149,7 +1230,7 @@ ori $t0, $t0, 0x8000</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">5.4</span> Control Flow Code Generation</h2>
+    <h2 class="section-title" id="s5-4"><span class="snum">5.4</span> Control Flow Code Generation</h2>
     <h3 class="sub-title">if Statement</h3>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1195,7 +1276,7 @@ nop                   // delay slot
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">5.5</span> Memory Operations</h2>
+    <h2 class="section-title" id="s5-5"><span class="snum">5.5</span> Memory Operations</h2>
     <div class="tbl-wrap">
       <table class="doc-table">
         <thead><tr><th>BedRock</th><th>MIPS</th><th>Description</th></tr></thead>
@@ -1210,7 +1291,7 @@ nop                   // delay slot
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">5.6</span> Binary Output Format</h2>
+    <h2 class="section-title" id="s5-6"><span class="snum">5.6</span> Binary Output Format</h2>
     <p>The compiler emits a flat binary of 32-bit big-endian MIPS instructions:</p>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">codegen/mod.rs</span><span class="cb-lang">Rust</span></div>
@@ -1250,7 +1331,7 @@ nop                   // delay slot
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">6.1</span> Direct Memory Writes — <code>poke</code></h2>
+    <h2 class="section-title" id="s6-1"><span class="snum">6.1</span> Direct Memory Writes — <code>poke</code></h2>
     <p><code>poke</code> writes a 32-bit value to an absolute physical address. No bounds checking occurs.</p>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">vga_write.br</span><span class="cb-lang">BedRock</span></div>
@@ -1275,7 +1356,7 @@ sw   $t1, 0($t0)      // poke</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">6.2</span> Direct Memory Reads — <code>peek</code></h2>
+    <h2 class="section-title" id="s6-2"><span class="snum">6.2</span> Direct Memory Reads — <code>peek</code></h2>
     <p><code>peek</code> reads a 32-bit value from an absolute physical address and returns it as an expression value (in <code>$v0</code> / the allocated register).</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1288,7 +1369,7 @@ sw   $t1, 0($t0)      // poke</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">6.3</span> I/O Port Access — <code>outb</code> / <code>inb</code></h2>
+    <h2 class="section-title" id="s6-3"><span class="snum">6.3</span> I/O Port Access — <code>outb</code> / <code>inb</code></h2>
     <p>BedRock implements I/O as MMIO. <code>outb</code> and <code>inb</code> are functionally identical to <code>poke</code> and <code>peek</code> at the machine code level — both emit <code>sw</code> and <code>lw</code> instructions respectively. The distinction is <strong>semantic only</strong>, signaling programmer intent.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1304,7 +1385,7 @@ sw   $t1, 0($t0)      // poke</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">6.4</span> VGA Text Mode — Practical Reference</h2>
+    <h2 class="section-title" id="s6-4"><span class="snum">6.4</span> VGA Text Mode — Practical Reference</h2>
     <p>VGA text mode buffer begins at physical address <code>0xB8000</code>. Each character cell is 2 bytes.</p>
     <div class="ascii-block">Byte 0 (even): ASCII character code
 Byte 1 (odd):  Attribute byte
@@ -1359,7 +1440,7 @@ cell_value    = (attribute &lt;&lt; 8) | ascii_code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">6.5</span> Keyboard Input — <code>in</code></h2>
+    <h2 class="section-title" id="s6-5"><span class="snum">6.5</span> Keyboard Input — <code>in</code></h2>
     <p>The keyword <code>in</code> (used as an expression) reads from the keyboard input address <code>0x80020000</code> (hardcoded in the compiler). Use <code>inb</code> with an explicit port address to override.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1375,7 +1456,7 @@ cell_value    = (attribute &lt;&lt; 8) | ascii_code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">6.6</span> Raw Instruction Injection — <code>asm</code></h2>
+    <h2 class="section-title" id="s6-6"><span class="snum">6.6</span> Raw Instruction Injection — <code>asm</code></h2>
     <p>Use <code>asm</code> for instructions not expressible in BedRock's grammar. Always document the encoding.</p>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">MIPS R-type encoding</span><span class="cb-lang">Reference</span></div>
@@ -1420,7 +1501,7 @@ Bits [5:0]   = function code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">7.1</span> The Address Library Pattern</h2>
+    <h2 class="section-title" id="s7-1"><span class="snum">7.1</span> The Address Library Pattern</h2>
     <p>Declare all hardware addresses as <code>root</code> constants in a dedicated <code>include</code> file. This creates a zero-cost hardware abstraction layer and eliminates magic numbers from your code.</p>
     <h3 class="sub-title">❌ Without Address Library (Avoid)</h3>
     <div class="code-block">
@@ -1462,7 +1543,7 @@ Bits [5:0]   = function code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">7.2</span> Write Pure Functions</h2>
+    <h2 class="section-title" id="s7-2"><span class="snum">7.2</span> Write Pure Functions</h2>
     <p>Functions that only operate on their parameters and local variables are predictable, testable, and cacheable. Avoid functions that modify hardware state without naming what they target.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1483,7 +1564,7 @@ Bits [5:0]   = function code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">7.3</span> Use Loops for Bulk Hardware Operations</h2>
+    <h2 class="section-title" id="s7-3"><span class="snum">7.3</span> Use Loops for Bulk Hardware Operations</h2>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
       <div class="ln-wrap">
@@ -1506,7 +1587,7 @@ Bits [5:0]   = function code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">7.4</span> Always Set BASE, DATA, STACK Explicitly</h2>
+    <h2 class="section-title" id="s7-4"><span class="snum">7.4</span> Always Set BASE, DATA, STACK Explicitly</h2>
     <div class="callout warn">
       <span class="callout-ico">⚠</span>
       <div><strong>Never rely on compiler defaults</strong> in production code. Explicit memory layout declarations make your program's address space auditable and portable across MIPS simulator configurations.</div>
@@ -1520,7 +1601,7 @@ Bits [5:0]   = function code</div>
   </div>
 
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">7.5</span> Use <code>asm</code> Sparingly and Document It</h2>
+    <h2 class="section-title" id="s7-5"><span class="snum">7.5</span> Use <code>asm</code> Sparingly and Document It</h2>
     <p>Inline assembly breaks the readability contract of BedRock. When you must use it, always document the instruction's human-readable name and effect.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1563,7 +1644,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.1 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.1</span> <code>root</code> Requires Literal Number Values</h2>
+    <h2 class="section-title" id="s8-1"><span class="snum">8.1</span> <code>root</code> Requires Literal Number Values</h2>
     <p>The right-hand side of a <code>root</code> declaration must be a literal integer. Expressions are not evaluated.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1574,7 +1655,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.2 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.2</span> Array Literals Allow Only Integer Literals</h2>
+    <h2 class="section-title" id="s8-2"><span class="snum">8.2</span> Array Literals Allow Only Integer Literals</h2>
     <p>Array literal values must be compile-time integer constants. Variables and expressions are not permitted — the parser will panic.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1586,7 +1667,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.3 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.3</span> Unresolved Variable Panics at Codegen</h2>
+    <h2 class="section-title" id="s8-3"><span class="snum">8.3</span> Unresolved Variable Panics at Codegen</h2>
     <p>Referencing an undeclared variable causes a <code>panic!</code> in the codegen phase. There is no graceful error recovery — the compiler process terminates.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1597,7 +1678,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.4 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.4</span> Function Call Arguments Are Positional Only</h2>
+    <h2 class="section-title" id="s8-4"><span class="snum">8.4</span> Function Call Arguments Are Positional Only</h2>
     <p>BedRock has no named parameters at call sites. Arguments are matched by position. The number of arguments passed is <strong>not validated</strong> by the parser.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1611,7 +1692,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.5 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.5</span> Return Value Is Always <code>$v0</code></h2>
+    <h2 class="section-title" id="s8-5"><span class="snum">8.5</span> Return Value Is Always <code>$v0</code></h2>
     <p>There is only one return register (<code>$v0</code> = register 2). Multiple return values are not supported. Calling two functions in a complex expression may overwrite <code>$v0</code> before it is consumed.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1627,7 +1708,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.6 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.6</span> No Operator Precedence for Bitwise / Comparison</h2>
+    <h2 class="section-title" id="s8-6"><span class="snum">8.6</span> No Operator Precedence for Bitwise / Comparison</h2>
     <p>All of <code>+</code>, <code>-</code>, <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&amp;</code>, <code>|</code>, <code>^</code> share the same precedence level. Only <code>*</code> and <code>/</code> bind more tightly.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1638,7 +1719,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.7 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.7</span> <code>!</code> Without <code>=</code> Is a Lexer Error</h2>
+    <h2 class="section-title" id="s8-7"><span class="snum">8.7</span> <code>!</code> Without <code>=</code> Is a Lexer Error</h2>
     <p>The lexer only recognizes <code>!=</code>. A lone <code>!</code> produces <code>Token::EOF</code> and terminates lexing silently — not an error message.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1649,7 +1730,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.8 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.8</span> String Literals Do Not Support Escape Sequences</h2>
+    <h2 class="section-title" id="s8-8"><span class="snum">8.8</span> String Literals Do Not Support Escape Sequences</h2>
     <p>The lexer reads string content character-by-character until the closing <code>"</code>. Backslash sequences are stored literally as two characters.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1661,7 +1742,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.9 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.9</span> Maximum 8 Concurrent Temporary Registers</h2>
+    <h2 class="section-title" id="s8-9"><span class="snum">8.9</span> Maximum 8 Concurrent Temporary Registers</h2>
     <p>The register pool contains 8 registers (<code>$t0</code>–<code>$t7</code>). If the pool is exhausted, <code>alloc_reg()</code> silently returns register 8 (<code>$t0</code>), corrupting a live value without any warning.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1684,20 +1765,28 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.10 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.10</span> No Shift Operators (<code>&lt;&lt;</code> / <code>&gt;&gt;</code>)</h2>
-    <p>These operators are absent from the lexer and parser. Use <code>asm</code> for all bit-shift operations.</p>
+    <h2 class="section-title" id="s8-10"><span class="snum">8.10</span> Shift Operators (<code>&lt;&lt;</code> / <code>&gt;&gt;</code>)</h2>
+    <p>BedRock now includes native shift operators in the lexer and parser. Both logical left-shift (<code>&lt;&lt;</code>) and logical right-shift (<code>&gt;&gt;</code>) are first-class operators and compile to the corresponding MIPS <code>sll</code> / <code>srl</code> instructions.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
-      <div class="ln-code"><span class="tk-c">// Logical shift left by 3: sll $t0, $t0, 3</span>
-<span class="tk-c">// Encoding: bits[31:26]=000000 rs=00000 rt=01000 rd=01000 shamt=00011 funct=000000</span>
-<span class="tk-c">// = 0x000840C0</span>
-<span class="tk-hw">asm</span>(<span class="tk-s">"000840C0"</span>);</div>
+      <div class="ln-wrap">
+        <div class="ln-nums"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        <div class="ln-code"><span class="tk-c">// ✅ Native shift operators — no asm required</span>
+<span class="tk-k">let</span> <span class="tk-i">attr</span>   <span class="tk-o">=</span> <span class="tk-i">bg</span> <span class="tk-o">&lt;&lt;</span> <span class="tk-n">4</span>;          <span class="tk-c">// VGA background color</span>
+<span class="tk-k">let</span> <span class="tk-i">upper</span>  <span class="tk-o">=</span> <span class="tk-i">val</span> <span class="tk-o">&gt;&gt;</span> <span class="tk-n">8</span>;         <span class="tk-c">// Extract high byte</span>
+<span class="tk-k">let</span> <span class="tk-i">scaled</span> <span class="tk-o">=</span> <span class="tk-i">idx</span> <span class="tk-o">&lt;&lt;</span> <span class="tk-n">2</span>;         <span class="tk-c">// Multiply by 4 (word offset)</span>
+<span class="tk-k">let</span> <span class="tk-i">mask</span>   <span class="tk-o">=</span> (<span class="tk-n">1</span> <span class="tk-o">&lt;&lt;</span> <span class="tk-i">bit</span>) <span class="tk-o">-</span> <span class="tk-n">1</span>;   <span class="tk-c">// Dynamic bit mask</span></div>
+      </div>
+    </div>
+    <div class="callout tip">
+      <span class="callout-ico">✦</span>
+      <div><strong>Added in Rev 1.1:</strong> Shift operators are now native. The <code>asm</code> workaround for shifts is no longer necessary, though raw <code>asm</code> remains available for advanced shift amounts or coprocessor operations.</div>
     </div>
   </div>
 
   <!-- §8.11 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.11</span> Integer Overflow Is Silent</h2>
+    <h2 class="section-title" id="s8-11"><span class="snum">8.11</span> Integer Overflow Is Silent</h2>
     <p>All arithmetic uses unsigned MIPS <code>addu</code>/<code>subu</code>. Overflow wraps silently at 2³² − 1. There are no overflow traps or checks at compile time or runtime.</p>
     <div class="callout danger">
       <span class="callout-ico">⛔</span>
@@ -1707,7 +1796,7 @@ Bits [5:0]   = function code</div>
 
   <!-- §8.12 -->
   <div class="doc-section">
-    <h2 class="section-title"><span class="snum">8.12</span> Division by Zero Is Undefined</h2>
+    <h2 class="section-title" id="s8-12"><span class="snum">8.12</span> Division by Zero Is Undefined</h2>
     <p>BedRock emits a raw MIPS <code>div</code> instruction. On MIPS, division by zero produces an unpredictable value in LO and does not raise an exception unless the hardware is explicitly configured to do so. There is no compile-time or runtime guard.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -1727,11 +1816,22 @@ Bits [5:0]   = function code</div>
 </div>
 
 </main>
-</div><!-- end .layout -->
+
+<!-- Mobile overlay -->
+<div class="mob-overlay" id="mob-overlay" onclick="toggleSidebar()"></div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <span class="footer-copy">© 2025 <strong>mrDevRussia</strong> — BedRock Language. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="https://github.com/mrDevRussia/BedRock-Language-Open-Source">GitHub</a>
+    <a href="https://github.com/mrDevRussia/BedRock-Language-Open-Source/blob/main/LICENSE">License</a>
+  </div>
+</footer>
 
 <script>
 /* ══════════════════════════════════════════════════════
-   SIDEBAR TOGGLE
+   SIDEBAR FOLDER TOGGLE
 ══════════════════════════════════════════════════════ */
 function tf(id) {
   const ch = document.getElementById('ch-' + id);
@@ -1748,7 +1848,28 @@ function tf(id) {
 }
 
 /* ══════════════════════════════════════════════════════
-   PAGE NAVIGATION
+   MOBILE SIDEBAR TOGGLE
+══════════════════════════════════════════════════════ */
+function toggleSidebar() {
+  const aside = document.querySelector('aside');
+  const overlay = document.getElementById('mob-overlay');
+  const open = aside.classList.toggle('open');
+  overlay.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function closeSidebarMobile() {
+  if (window.innerWidth <= 768) {
+    const aside = document.querySelector('aside');
+    const overlay = document.getElementById('mob-overlay');
+    aside.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   PAGE + ANCHOR NAVIGATION
 ══════════════════════════════════════════════════════ */
 const PAGE_TO_SECTION = {
   'home': null, 'philosophy': '1', 'lexical': '2',
@@ -1756,19 +1877,10 @@ const PAGE_TO_SECTION = {
   'hardware': '6', 'practices': '7', 'edge': '8'
 };
 
-function nav(pid, el) {
-  // Hide all pages
+function _activatePage(pid) {
   document.querySelectorAll('.doc-page').forEach(p => p.classList.remove('active'));
   const pg = document.getElementById('page-' + pid);
   if (pg) pg.classList.add('active');
-
-  // Update active sidebar link
-  document.querySelectorAll('.tree-row').forEach(r => r.classList.remove('active'));
-  if (el) { el.classList.add('active'); }
-  else {
-    const lk = document.querySelector('[data-page="' + pid + '"]');
-    if (lk) lk.classList.add('active');
-  }
 
   // Auto-expand the relevant section folder
   const sec = PAGE_TO_SECTION[pid];
@@ -1781,9 +1893,60 @@ function nav(pid, el) {
       if (tg) tg.innerHTML = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 2.5L4.5 6.5L8 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     }
   }
+  document.title = pid === 'home'
+    ? 'BedRock Language — Documentation'
+    : 'BedRock Docs — §' + (sec || '') + ' ' + pid.charAt(0).toUpperCase() + pid.slice(1);
+}
 
+function _activateSidebarLink(el, pid, anchor) {
+  document.querySelectorAll('.tree-row').forEach(r => r.classList.remove('active'));
+  if (el) {
+    el.classList.add('active');
+  } else {
+    // match by page + anchor combo
+    const sel = anchor
+      ? `[data-page="${pid}"][data-anchor="${anchor}"]`
+      : `[data-page="${pid}"]`;
+    const lk = document.querySelector(sel);
+    if (lk) lk.classList.add('active');
+  }
+}
+
+// nav() — navigate to a page, scroll to top
+function nav(pid, el) {
+  _activatePage(pid);
+  _activateSidebarLink(el, pid, null);
   window.scrollTo(0, 0);
-  document.title = pid === 'home' ? 'BedRock Language — Documentation' : 'BedRock Docs — §' + (sec || '') + ' ' + pid.charAt(0).toUpperCase() + pid.slice(1);
+  closeSidebarMobile();
+}
+
+// navA() — navigate to a page AND scroll to a specific section anchor
+function navA(pid, anchor, el) {
+  const alreadyOnPage = document.getElementById('page-' + pid)?.classList.contains('active');
+
+  _activatePage(pid);
+  _activateSidebarLink(el, pid, anchor);
+  closeSidebarMobile();
+
+  // Scroll to anchor — use RAF to let the page render first if it was hidden
+  const doScroll = () => {
+    const target = document.getElementById(anchor);
+    if (!target) return;
+    const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 48;
+    const y = target.getBoundingClientRect().top + window.scrollY - headerH - 16;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+    // Brief highlight animation
+    target.classList.remove('section-highlight');
+    void target.offsetWidth; // force reflow
+    target.classList.add('section-highlight');
+    setTimeout(() => target.classList.remove('section-highlight'), 1400);
+  };
+
+  if (alreadyOnPage) {
+    doScroll();
+  } else {
+    requestAnimationFrame(() => requestAnimationFrame(doScroll));
+  }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1815,15 +1978,46 @@ function filterSidebar(query) {
     if (li) li.style.display = (!q || text.includes(q)) ? '' : 'none';
   });
   if (q) {
-    // Expand all folders when filtering
     ['1','2','3','4','5','6','7','8'].forEach(id => {
       const ch = document.getElementById('ch-' + id);
+      const tg = document.getElementById('tg-' + id);
       if (ch) { ch.classList.remove('collapsed'); ch.style.maxHeight = '600px'; }
+      if (tg) tg.innerHTML = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 2.5L4.5 6.5L8 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     });
   }
 }
 
-/* Prevent anchor navigation */
+/* ══════════════════════════════════════════════════════
+   IN-PAGE SCROLL SPY (highlights sidebar on scroll)
+══════════════════════════════════════════════════════ */
+(function() {
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 48;
+      const activePage = document.querySelector('.doc-page.active');
+      if (!activePage) { ticking = false; return; }
+      const headings = activePage.querySelectorAll('h2.section-title[id]');
+      let current = null;
+      headings.forEach(h => {
+        if (h.getBoundingClientRect().top <= headerH + 40) current = h;
+      });
+      if (current) {
+        const aid = current.id;
+        const sideLink = document.querySelector(`[data-anchor="${aid}"]`);
+        if (sideLink && !sideLink.classList.contains('active')) {
+          document.querySelectorAll('.tree-row').forEach(r => r.classList.remove('active'));
+          sideLink.classList.add('active');
+        }
+      }
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+
+/* Prevent default on bare # links */
 document.querySelectorAll('a[href="#"]').forEach(a => a.addEventListener('click', e => e.preventDefault()));
 </script>
 </body>
