@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
-    
-    <link rel="apple-touch-icon" href="favicon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BedRock Language — Documentation</title>
@@ -369,13 +366,19 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
   </div>
   <div class="hd-right">
     <nav class="hd-nav" style="display:flex;gap:2px">
-
-      <a href="https://github.com/mrDevRussia/BedRock-Language-Open-Source" style="display:flex;align-items:center;gap:5px;border-left:1px solid #1e1e28;margin-left:6px;padding-left:14px">
+      <a href="#">Guide</a>
+      <a href="#">API</a>
+      <a href="#">Examples</a>
+      <a href="#" style="display:flex;align-items:center;gap:5px;border-left:1px solid #1e1e28;margin-left:6px;padding-left:14px">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
       </a>
     </nav>
-   
+    <div class="hd-search">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Quick search
+      <kbd>⌘K</kbd>
+    </div>
   </div>
 </header>
 
@@ -470,6 +473,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
         <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-4" onclick="navA('syntax','s4-4',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.4 Functions</span></a></li>
         <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-5" onclick="navA('syntax','s4-5',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.5 Control Flow</span></a></li>
         <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-6" onclick="navA('syntax','s4-6',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.6 Inline Assembly</span></a></li>
+        <li><a class="tree-row" href="#" data-page="syntax" data-anchor="s4-7" onclick="navA('syntax','s4-7',this);return false;"><span class="indent" style="width:28px"></span><span class="toggle" style="width:18px"></span><span class="dot"></span><span class="tree-label">4.7 call() — Function Pointers</span></a></li>
       </ul>
     </li>
 
@@ -691,6 +695,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
           <tr><td>peek</td><td>Hardware</td><td>Direct memory read</td></tr>
           <tr><td>in</td><td>Hardware</td><td>Wait for keyboard input (alias for WaitKey)</td></tr>
           <tr><td>include</td><td>Preprocessor</td><td>Include another source file (textual substitution)</td></tr>
+          <tr><td>call</td><td>Hardware / Pointer</td><td>Jump to a runtime address via <code>jalr</code> — function pointer call</td></tr>
         </tbody>
       </table>
     </div>
@@ -1126,6 +1131,108 @@ nop                    // Delay slot</div>
 <span class="tk-hw">asm</span>(<span class="tk-s">"00084080"</span>);   <span class="tk-c">// sll $t0, $t0, 2  (shift left by 2)</span>
 <span class="tk-hw">asm</span>(<span class="tk-s">"000840C0"</span>);   <span class="tk-c">// sll $t0, $t0, 3  (shift left by 3)</span></div>
       </div>
+    </div>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="section-title" id="s4-7"><span class="snum">4.7</span> <code>call()</code> — Function Pointers</h2>
+    <p>The <code>call(expr)</code> statement jumps to a runtime address stored in a variable or computed from an expression. Unlike a regular function call which uses an absolute <code>jal</code>, <code>call()</code> emits a <code>jalr</code> instruction — it loads the target address at runtime from whatever expression is given.</p>
+
+    <div class="callout info">
+      <span class="callout-ico">ℹ</span>
+      <div><strong>Added in Rev 1.1:</strong> Requires <code>Statement::CallPtr</code> in <code>ast.rs</code>, <code>Token::Call</code> in <code>lexer.rs</code>, <code>callptr_stmt()</code> in <code>parser.rs</code>, and the <code>jalr</code> emitter in <code>codegen/mod.rs</code>.</div>
+    </div>
+
+    <h3 class="sub-title">Syntax</h3>
+    <div class="code-block">
+      <button class="copy-btn" onclick="cpb(this)">Copy</button>
+      <div class="ln-code"><span class="tk-hw">call</span>(<span class="tk-i">expression</span>);</div>
+    </div>
+
+    <h3 class="sub-title">Basic Usage — Stored Address</h3>
+    <div class="code-block">
+      <div class="cb-header"><span class="cb-fname">ptr_call.br</span><span class="cb-lang">BedRock</span></div>
+      <button class="copy-btn" onclick="cpb(this)">Copy</button>
+      <div class="ln-wrap">
+        <div class="ln-nums"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+        <div class="ln-code"><span class="tk-k">root</span> <span class="tk-i">BASE</span>  <span class="tk-o">=</span> <span class="tk-v">0x80100000</span>;
+<span class="tk-k">root</span> <span class="tk-i">DATA</span>  <span class="tk-o">=</span> <span class="tk-v">0x80110000</span>;
+<span class="tk-k">root</span> <span class="tk-i">STACK</span> <span class="tk-o">=</span> <span class="tk-v">0x80120000</span>;
+
+<span class="tk-k">fn</span> <span class="tk-i">my_func</span>() {
+    <span class="tk-hw">poke</span>(<span class="tk-v">0xBF000900</span>, <span class="tk-v">0x41</span>);
+}
+
+<span class="tk-k">let</span> <span class="tk-i">fn_ptr</span> <span class="tk-o">=</span> <span class="tk-v">0x80100010</span>;
+<span class="tk-hw">call</span>(<span class="tk-i">fn_ptr</span>);</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">MIPS Instructions Generated</h3>
+    <div class="code-block">
+      <button class="copy-btn" onclick="cpb(this)">Copy</button>
+      <div class="ln-code">lw   $tX, [DATA + fn_ptr_offset]   <span class="tk-c">// load address from variable</span>
+jalr $ra, $tX                      <span class="tk-c">// jump and link via register</span>
+nop                                 <span class="tk-c">// delay slot</span></div>
+    </div>
+
+    <h3 class="sub-title">Encoding of <code>jalr $ra, $tX</code></h3>
+    <div class="tbl-wrap">
+      <table class="doc-table">
+        <thead><tr><th>Register $tX</th><th>MIPS Number</th><th>jalr Encoding (hex)</th></tr></thead>
+        <tbody>
+          <tr><td>$t0</td><td>8</td><td><code>0x0100F809</code></td></tr>
+          <tr><td>$t1</td><td>9</td><td><code>0x0120F809</code></td></tr>
+          <tr><td>$t2</td><td>10</td><td><code>0x0140F809</code></td></tr>
+          <tr><td>$t3</td><td>11</td><td><code>0x0160F809</code></td></tr>
+          <tr><td>$t4</td><td>12</td><td><code>0x0180F809</code></td></tr>
+          <tr><td>$t5</td><td>13</td><td><code>0x01A0F809</code></td></tr>
+          <tr><td>$t6</td><td>14</td><td><code>0x01C0F809</code></td></tr>
+          <tr><td>$t7</td><td>15</td><td><code>0x01E0F809</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">Dynamic Dispatch — Computed Address</h3>
+    <p>The expression inside <code>call()</code> can be any valid BedRock expression — not just a simple variable. The compiler evaluates the full expression and jumps to the resulting address.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="cpb(this)">Copy</button>
+      <div class="ln-wrap">
+        <div class="ln-nums"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+        <div class="ln-code"><span class="tk-c">// Jump table — select handler by index</span>
+<span class="tk-k">let</span> <span class="tk-i">handlers</span> <span class="tk-o">=</span> [<span class="tk-v">0x80100050</span>, <span class="tk-v">0x80100080</span>, <span class="tk-v">0x801000B0</span>];
+<span class="tk-k">let</span> <span class="tk-i">idx</span> <span class="tk-o">=</span> <span class="tk-n">1</span>;
+<span class="tk-hw">call</span>(<span class="tk-i">handlers</span>[<span class="tk-i">idx</span>]);
+
+<span class="tk-c">// Computed from base + offset</span>
+<span class="tk-k">let</span> <span class="tk-i">base</span>   <span class="tk-o">=</span> <span class="tk-v">0x80100000</span>;
+<span class="tk-hw">call</span>(<span class="tk-i">base</span> <span class="tk-o">+</span> <span class="tk-v">0x50</span>);</div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-ico">⚠</span>
+      <div><strong>No return value:</strong> <code>call()</code> is a <em>statement</em> — it does not capture <code>$v0</code>. If the called function returns a value, it will be in <code>$v0</code> but the compiler does not assign it anywhere. Use a regular named function call (<code>let r = func();</code>) if you need the return value.</div>
+    </div>
+
+    <div class="callout danger">
+      <span class="callout-ico">⛔</span>
+      <div><strong>No argument passing:</strong> <code>call(expr)</code> does not push arguments onto the stack. The callee must read its inputs directly from known memory addresses or registers if needed. For full argument passing, use a named function call.</div>
+    </div>
+
+    <h3 class="sub-title">Comparison: <code>call()</code> vs Named Call</h3>
+    <div class="tbl-wrap">
+      <table class="doc-table">
+        <thead><tr><th>Feature</th><th>call(ptr)</th><th>func_name(args)</th></tr></thead>
+        <tbody>
+          <tr><td>Target resolution</td><td>Runtime (register)</td><td>Compile-time (absolute jal)</td></tr>
+          <tr><td>MIPS instruction</td><td><code>jalr $ra, $tX</code></td><td><code>jal 0xABCDEF</code></td></tr>
+          <tr><td>Argument passing</td><td>❌ None</td><td>✅ Via stack</td></tr>
+          <tr><td>Return value</td><td>❌ Not captured</td><td>✅ In $v0 / let</td></tr>
+          <tr><td>Dynamic dispatch</td><td>✅ Any expression</td><td>❌ Static only</td></tr>
+          <tr><td>Flash-safe (PIC)</td><td>✅ If address is correct</td><td>❌ Absolute address</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -1824,8 +1931,9 @@ Bits [5:0]   = function code</div>
 <footer class="site-footer">
   <span class="footer-copy">© 2025 <strong>mrDevRussia</strong> — BedRock Language. All rights reserved.</span>
   <div class="footer-links">
-    <a href="https://github.com/mrDevRussia/BedRock-Language-Open-Source">GitHub</a>
-    <a href="https://github.com/mrDevRussia/BedRock-Language-Open-Source/blob/main/LICENSE">License</a>
+    <a href="#">GitHub</a>
+    <a href="#">License</a>
+    <a href="#">Changelog</a>
   </div>
 </footer>
 
