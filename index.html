@@ -365,7 +365,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
       <span class="logo-text">BedRock<sup>docs</sup></span>
     </a>
     <div class="hd-sep"></div>
-    <span class="hd-version">Rev 2.0</span>
+    <span class="hd-version">Rev 2.1</span>
   </div>
   <div class="hd-right">
     <nav class="hd-nav" style="display:flex;gap:2px">
@@ -720,6 +720,8 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
           <tr><td>&amp;</td><td>Ampersand</td><td><code>and</code></td></tr>
           <tr><td>|</td><td>Pipe</td><td><code>or</code></td></tr>
           <tr><td>^</td><td>Caret</td><td><code>xor</code></td></tr>
+          <tr><td>&lt;&lt;</td><td>ShiftLeft</td><td><code>sllv</code></td></tr>
+          <tr><td>&gt;&gt;</td><td>ShiftRight</td><td><code>srlv</code></td></tr>
         </tbody>
       </table>
     </div>
@@ -1021,7 +1023,7 @@ nop                    // Delay slot</div>
 
   <div class="doc-section">
     <h2 class="section-title" id="s4-3"><span class="snum">4.3</span> Arithmetic &amp; Expressions</h2>
-    <p>Precedence rules: <code>*</code> and <code>/</code> bind tightly (handled in <code>parse_term</code>). All other operators — <code>+</code>, <code>-</code>, <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&amp;</code>, <code>|</code>, <code>^</code> — share the same lower precedence level (<code>parse_expression</code>). Use parentheses liberally — see §8.6.</p>
+    <p>Precedence rules: <code>*</code> and <code>/</code> bind tightly (handled in <code>parse_term</code>). All other operators — <code>+</code>, <code>-</code>, <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code> — share the same lower precedence level (<code>parse_expression</code>). Use parentheses liberally — see §8.6.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
       <div class="ln-wrap">
@@ -1408,6 +1410,7 @@ nop                   // delay slot
         <thead><tr><th>Output File</th><th>Description</th></tr></thead>
         <tbody>
           <tr><td>&lt;source&gt;.bin</td><td>Raw binary of the compiled program (flat MIPS words)</td></tr>
+          <tr><td>&lt;source&gt;.map.json</td><td>Source map: per-instruction line number, absolute address, and 32-bit opcode — useful for debugging and binary auditing</td></tr>
           <tr><td>bedrock_os.img</td><td>1,474,560-byte floppy disk image (1.44 MB), binary at offset 0, first sector = 512 bytes</td></tr>
         </tbody>
       </table>
@@ -1869,7 +1872,7 @@ Bits [5:0]   = function code</div>
   <!-- §8.10 -->
   <div class="doc-section">
     <h2 class="section-title" id="s8-10"><span class="snum">8.10</span> Shift Operators (<code>&lt;&lt;</code> / <code>&gt;&gt;</code>)</h2>
-    <p>BedRock now includes native shift operators in the lexer and parser. Both logical left-shift (<code>&lt;&lt;</code>) and logical right-shift (<code>&gt;&gt;</code>) are first-class operators and compile to the corresponding MIPS <code>sll</code> / <code>srl</code> instructions.</p>
+    <p>BedRock includes native shift operators in the lexer and codegen. Both logical left-shift (<code>&lt;&lt;</code>) and logical right-shift (<code>&gt;&gt;</code>) are first-class operators and compile to the corresponding MIPS <code>sllv</code> / <code>srlv</code> instructions.</p>
     <div class="code-block">
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
       <div class="ln-wrap">
