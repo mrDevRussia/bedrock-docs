@@ -628,7 +628,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
     </div>
   </div>
 
-  <p>Welcome to the BedRock language documentation. BedRock is a systems programming language that compiles to bare-metal MIPS-32 big-endian machine code. Every language construct maps directly and transparently to a fixed sequence of hardware instructions — no runtime, no OS abstraction, no magic.</p>
+  <p>Welcome to the BedRock language documentation. BedRock is a systems programming language that compiles to bare-metal MIPS-32 big-endian/le-endian machine code. Every language construct maps directly and transparently to a fixed sequence of hardware instructions — no runtime, no OS abstraction, no magic.</p>
   <p>This documentation covers the complete language specification, compiler internals, hardware interfacing primitives, and hard-won guidance on the compiler's known enforcement behaviors and edge cases.</p>
 
   <h2 class="section-title" style="margin-top:28px"><span class="snum">TOC</span> Documentation Sections</h2>
@@ -682,7 +682,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
     </div>
     <div class="callout info">
       <span class="callout-ico">ℹ</span>
-      <div><strong>Auditability:</strong> Every BedRock construct has a 1-to-1 mapping to MIPS-32 big-endian machine code that you can audit, verify, and predict. Use a hex editor on any <code>.bin</code> output to confirm.</div>
+      <div><strong>Auditability:</strong> Every BedRock construct has a 1-to-1 mapping to MIPS-32 big/le-endian machine code that you can audit, verify, and predict. Use a hex editor on any <code>.bin</code> output to confirm.</div>
     </div>
   </div>
 
@@ -692,7 +692,7 @@ code{font-family:var(--font-mono);font-size:11.5px;background:var(--g100);border
     <p>Numbers in BedRock are unsigned 64-bit integers at parse time, collapsed to 32-bit at code generation. All memory addresses are 32-bit values. There are no floating-point types, no signed arithmetic in the type system, and no implicit widening or truncation.</p>
     <p>The compiler validates output at the byte level by:</p>
     <ul class="doc-list">
-      <li>Encoding all instructions as big-endian 32-bit words via <code>to_be_bytes()</code></li>
+      <li>Encoding all instructions as big/le-endian 32-bit words via <code>to_be_bytes()</code></li>
       <li>Writing a raw <code>.bin</code> file with zero padding assumptions</li>
       <li>Optionally writing a 1.44 MB floppy image (<code>bedrock_os.img</code>) by embedding the binary at sector 0</li>
     </ul>
@@ -1468,7 +1468,7 @@ nop                   // delay slot
 
   <div class="doc-section">
     <h2 class="section-title" id="s5-6"><span class="snum">5.6</span> Binary Output Format</h2>
-    <p>The compiler emits a flat binary of 32-bit big-endian MIPS instructions:</p>
+    <p>The compiler emits a flat binary of 32-bit big/le-endian MIPS instructions:</p>
     <div class="code-block">
       <div class="cb-header"><span class="cb-fname">codegen/mod.rs</span><span class="cb-lang">Rust</span></div>
       <button class="copy-btn" onclick="cpb(this)">Copy</button>
@@ -2406,7 +2406,7 @@ IrModule  (list of IrInstr)
       <table class="doc-table">
         <thead><tr><th>Flag</th><th>Effect</th></tr></thead>
         <tbody>
-          <tr><td><code>--target mips</code></td><td>Default. IR → MIPS-32 big-endian <code>.bin</code></td></tr>
+          <tr><td><code>--target mips/-le</code></td><td>Default. IR → MIPS-32 big-endian or little-endian <code>.bin</code></td></tr>
           <tr><td><code>--target arm</code></td><td>IR → ARM backend (stub — exits with error)</td></tr>
           <tr><td><code>--target ir</code></td><td>IR → text IR listing <code>.ir</code> file</td></tr>
           <tr><td><code>--emit-ir</code></td><td>Print IR to stdout and exit (no binary written)</td></tr>
